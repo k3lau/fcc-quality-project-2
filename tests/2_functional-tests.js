@@ -11,21 +11,15 @@ suite("Functional Test ", function () {
     test("Create an issue with every field", function (done) {
       const issue_title = "test # 1 issue title";
       const issue_text = "test # 1 issue text";
-      const created_on = Date.now();
-      const updated_on = Date.now();
       const created_by = "test # 1 create by";
       const assigned_to = "test # 1 assigned to";
-      const open = true;
       const status_text = "test # 1 status text";
       const project = "apitest";
       const issue = {
         issue_title: issue_title,
         issue_text: issue_text,
-        created_on: created_on,
-        updated_on: updated_on,
         created_by: created_by,
         assigned_to: assigned_to,
-        open: open,
         status_text: status_text,
         project: project,
       };
@@ -38,15 +32,56 @@ suite("Functional Test ", function () {
           assert.equal(res.type, "application/json");
           assert.equal(res.body.issue_title, issue_title);
           assert.equal(res.body.issue_text, issue_text);
-          //The Date.now() assigned to created_on is earlier than
-          //  the default Date.now() created when saving the new document
-          //let resCreatedOn = Date.parse(res.body.created_on);
-          //assert.equal(resCreatedOn, created_on);
-          //assert.equal(new Date(Date.parse(res.body.created_by)), created_by);
           assert.equal(res.body.assigned_to, assigned_to);
+          assert.equal(res.body.created_by, created_by);
           assert.equal(res.body.open, open);
           assert.equal(res.body.status_text, status_text);
           assert.equal(res.body.project, project);
+        });
+      done();
+    });
+    test("Create an issue with only required field", function (done) {
+      const issue_title = "test # 1 issue title";
+      const issue_text = "test # 1 issue text";
+      const created_by = "test # 1 create by";
+      const project = "apitest";
+      const issue = {
+        issue_title: issue_title,
+        issue_text: issue_text,
+        created_by: created_by,
+      };
+      chai
+        .request(server)
+        .post(`/api/issues/${project}`)
+        .send(issue)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.type, "application/json");
+          assert.equal(res.body.issue_title, issue_title);
+          assert.equal(res.body.issue_text, issue_text);
+          assert.equal(res.body.created_by, created_by);
+          assert.equal(res.body.assigned_to, "");
+          assert.equal(res.body.open, true);
+          assert.equal(res.body.status_text, "");
+          assert.equal(res.body.project, project);
+        });
+      done();
+    });
+    test("Create an issue with missing required field", function (done) {
+      const issue_text = "test # 1 issue text";
+      const created_by = "test # 1 create by";
+      const project = "apitest";
+      const issue = {
+        issue_text: issue_text,
+        created_by: created_by,
+      };
+      chai
+        .request(server)
+        .post(`/api/issues/${project}`)
+        .send(issue)
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          assert.deepEqual(res.body, { error: "required field(s) missing" });
         });
       done();
     });
@@ -65,9 +100,9 @@ suite("Functional Test ", function () {
         status_text: "",
         project: "apitest",
       };
-      console.log(`TEST ${knownTest.issue_title}`);
+      //console.log(`TEST ${knownTest.issue_title}`);
       const url = `/api/issues/${knownTest.project}?issue_title=${knownTest.issue_title}`;
-      console.log(url);
+      //console.log(url);
       chai
         .request(server)
         .get(url)
@@ -77,7 +112,6 @@ suite("Functional Test ", function () {
           assert.equal(res.type, "application/json");
           assert.equal(res.body[0].issue_title, knownTest.issue_title);
           assert.equal(res.body[0].issue_text, knownTest.issue_text);
-
           assert.equal(res.body[0].created_on, knownTest.created_on);
           assert.equal(res.body[0].created_by, knownTest.created_by);
           assert.equal(res.body[0].assigned_to, knownTest.assigned_to);

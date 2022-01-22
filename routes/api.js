@@ -36,10 +36,10 @@ module.exports = function (app) {
         issue_text: req.body.issue_text,
         created_on: Date.now(),
         updated_on: Date.now(),
-        created_by: req.body.created_by,
-        assigned_to: req.body.assigned_to,
+        created_by: req.body.created_by || "",
+        assigned_to: req.body.assigned_to || "",
         open: true,
-        status_text: req.body.status_text,
+        status_text: req.body.status_text || "",
         project: project,
       });
       issue
@@ -53,7 +53,7 @@ module.exports = function (app) {
           ${issue}
           ${JSON.stringify(err, null, 2)}`);
           if (err.name === "ValidationError") {
-            res.send({ error: "required field(s) missing" });
+            res.status(400).send({ error: "required field(s) missing" });
           }
         });
     })
