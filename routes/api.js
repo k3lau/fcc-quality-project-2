@@ -117,7 +117,7 @@ module.exports = function (app) {
         console.log(`RESULT doc:
         ${doc}`);
 
-        if (!doc.get("_id")) {
+        if (doc === null || !doc.get("_id")) {
           console.log(`No _id`);
           return res.json({ error: "could not update", _id: reqIssue._id });
         }
