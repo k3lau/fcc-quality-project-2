@@ -216,8 +216,8 @@ suite("Functional Test ", function () {
         .put(url)
         .send(reqId)
         .end((err, res) => {
-          console.log(`Response body 
-          ${JSON.stringify(res.body)}`);
+          //console.log(`Response body
+          //${JSON.stringify(res.body)}`);
           assert.equal(res.status, 200);
           assert.equal(res.type, "application/json");
           assert.equal(res.body.result, "successfully updated");
@@ -253,8 +253,8 @@ suite("Functional Test ", function () {
         .put(url)
         .send(reqId)
         .end((err, res) => {
-          console.log(`Response body 
-          ${JSON.stringify(res.body)}`);
+          //console.log(`Response body
+          //${JSON.stringify(res.body)}`);
           assert.equal(res.status, 200);
           assert.equal(res.type, "application/json");
           assert.equal(res.body.result, "successfully updated");
@@ -289,8 +289,8 @@ suite("Functional Test ", function () {
         .put(url)
         .send(reqId)
         .end((err, res) => {
-          console.log(`Response body 
-          ${JSON.stringify(res.body)}`);
+          //console.log(`Response body
+          //${JSON.stringify(res.body)}`);
           assert.equal(res.status, 200);
           assert.equal(res.type, "application/json");
           assert.deepEqual(res.body, { error: "missing _id" });
@@ -323,8 +323,8 @@ suite("Functional Test ", function () {
         .put(url)
         .send(reqId)
         .end((err, res) => {
-          console.log(`Response body 
-          ${JSON.stringify(res.body)}`);
+          //console.log(`Response body
+          //${JSON.stringify(res.body)}`);
           assert.equal(res.status, 200);
           assert.equal(res.type, "application/json");
           assert.deepEqual(res.body, {
@@ -360,8 +360,8 @@ suite("Functional Test ", function () {
         .put(url)
         .send(reqId)
         .end((err, res) => {
-          console.log(`Response body 
-          ${JSON.stringify(res.body)}`);
+          //console.log(`Response body
+          //${JSON.stringify(res.body)}`);
           assert.equal(res.status, 200);
           assert.equal(res.type, "application/json");
           assert.deepEqual(res.body, {
@@ -397,8 +397,8 @@ suite("Functional Test ", function () {
         .put(url)
         .send(reqId)
         .end((err, res) => {
-          console.log(`Response body 
-          ${JSON.stringify(res.body)}`);
+          //console.log(`Response body
+          //${JSON.stringify(res.body)}`);
           assert.equal(res.status, 200);
           assert.equal(res.type, "application/json");
           assert.deepEqual(res.body, {
@@ -438,6 +438,22 @@ suite("Functional Test ", function () {
                 _id: issueId,
               });
             });
+        });
+      done();
+    });
+    test("Delete an issue with missing _id", function (done) {
+      const project = "apitest";
+
+      chai
+        .request(server)
+        .delete(`/api/issues/${project}`)
+        .send({})
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.type, "application/json");
+          assert.deepEqual(res.body, {
+            error: "missing _id",
+          });
         });
       done();
     });

@@ -62,7 +62,7 @@ module.exports = function (app) {
     .put(async function (req, res) {
       let project = req.params.project;
       const reqIssue = req.body;
-      //console.log(req.body);
+      console.log(`PUT request with ${req.body}`);
       //Error handling for request not an object
       if (
         !(
@@ -113,10 +113,11 @@ module.exports = function (app) {
           new: true,
         });
 
-        //console.log(`RESULT doc:
-        //${doc}`);
+        console.log(`RESULT doc:
+        ${doc}`);
 
         if (!doc.get("_id")) {
+          console.log(`No _id`);
           return res.json({ error: "could not update", _id: reqIssue._id });
         }
         return res.json({ result: "successfully updated", _id: reqIssue._id });
