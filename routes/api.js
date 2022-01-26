@@ -62,7 +62,7 @@ module.exports = function (app) {
     .put(async function (req, res) {
       let project = req.params.project;
       const reqIssue = req.body;
-      console.log(`PUT request with ${req.body}`);
+      console.log(`PUT request with ${JSON.stringify(req.body)}`);
       //Error handling for request not an object
       if (
         !(
@@ -106,8 +106,9 @@ module.exports = function (app) {
           });
         }
 
-        //console.log(`PUT issue:
-        //  ${JSON.stringify(editField)} and ${filter}`);
+        console.log(`PUT issue:
+          ${JSON.stringify(editField)} and ${JSON.stringify(filter)}`);
+        editField.updated_on = Date.now();
 
         let doc = await Issue.findOneAndUpdate(filter, editField, {
           new: true,
